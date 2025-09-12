@@ -3,7 +3,7 @@
   "user_id": "anonymous",
   "level": 0,
   "topic_mastery": {
-    "RAII": 0,
+    "RAII": 40,
     "RANGES": 0,
     "TEMPLATES": 0,
     "CONCURRENCY": 0,
@@ -12,13 +12,26 @@
     "PERFORMANCE": 0,
     "ARCHITECTURE": 0
   },
-  "recent_scores": [],
+  "recent_scores": [
+    {
+      "exercise_id": "baseline_raii_exercise.cpp",
+      "timestamp": "2025-09-12T09:45:00Z",
+      "rubric": {
+        "correctness": 38,
+        "modern": 26,
+        "quality": 18,
+        "performance": 9,
+        "total": 91
+      },
+      "topics": ["RAII","BASELINE"]
+    }
+  ],
   "weak_topics": [],
   "next_recommendation": {
     "level": 0,
-    "focus_topics": ["RAII", "RANGES"],
-    "rationale": "First run bootstrap - baseline diagnostic needed"
+    "focus_topics": ["RAII"],
+    "rationale": "Resource leak in move assignment needs correction"
   },
-  "streaks": {"accepted": 0, "resubmit": 0},
+  "streaks": {"accepted": 1, "resubmit": 0},
   "promotion_pending": false
 }

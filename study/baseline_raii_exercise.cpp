@@ -5,6 +5,7 @@
 #include <iostream>
 #include <memory>
 #include <string>
+#include <utility>
 
 // 문제: 파일 핸들(FILE*)을 안전하게 관리하는 RAII 클래스를 구현하시오.
 // 요구사항:
@@ -15,22 +16,43 @@
 // - 예외가 발생해도 파일이 누수되지 않아야 함
 
 // TODO: file_wrapper 클래스 구현 - RAII 패턴과 이동 의미론 적용
+// YOUR CODE HERE - START (TODO: 파일 핸들 안전 관리)
 class file_wrapper {
-    // YOUR CODE HERE - START (TODO: 파일 핸들 안전 관리)
-    
-    // YOUR CODE HERE - END
-
 public:
     // TODO: 생성자 구현 - 파일명과 모드를 받아 파일 열기
-    
+    file_wrapper(const char* filename, const char* mode) {
+        file_ = fopen(filename, mode);
+    }
     // TODO: 소멸자 구현 - 자동 파일 닫기
+    ~file_wrapper() {
+        if (file_)
+            fclose(file_);
+    }
     
     // TODO: 복사 생성자와 복사 대입 연산자 금지
+    file_wrapper(const file_wrapper&) = delete;
+    file_wrapper& operator=(const file_wrapper&) = delete;
     
     // TODO: 이동 생성자와 이동 대입 연산자 구현
+    file_wrapper(file_wrapper&& other) noexcept : file_(other.file_) {
+        other.file_ = nullptr;
+    }
+    file_wrapper& operator=(file_wrapper&& other) noexcept {
+        if(this != &other) {
+            if (file_) fclose(file_);  // 기존 자원 먼저 해제
+            file_ = std::exchange(other.file_, nullptr);
+        }
+        return *this;
+    }
     
-    // TODO: get() 메서드 구현 - FILE* 반환
+    // TODO: get() 메서드 구현 - FILE* 반환-
+    FILE* get() const {
+        return file_;
+    }
+private:
+    FILE* file_;
 };
+    // YOUR CODE HERE - END
 
 int main() {
     // 테스트 1: 기본 파일 열기와 자동 닫기
@@ -50,6 +72,29 @@ int main() {
         // 기대: file1.get() == nullptr, file2.get() != nullptr
         std::cout << "이동 후 file1 상태: " << (file1.get() ? "유효" : "무효") << std::endl;
         std::cout << "이동 후 file2 상태: " << (file2.get() ? "유효" : "무효") << std::endl;
+    }
+    
+    // 테스트 3: 예외 안전성 테스트 (파일 열기 실패)
+    {
+        file_wrapper invalid_file("nonexistent_directory/test.txt", "r");
+        if (invalid_file.get()) {
+            std::cout << "파일 열기 성공" << std::endl;
+        } else {
+            std::cout << "파일 열기 실패 - 안전하게 처리됨" << std::endl;
+        }
+        // 기대: 소멸자에서 nullptr 체크로 안전하게 처리
+    }
+    
+    // 테스트 4: 이동 대입 테스트 (자원 해제 확인)
+    {
+        file_wrapper file1("test1.txt", "w");
+        file_wrapper file2("test2.txt", "w");
+        
+        if (file1.get() && file2.get()) {
+            file1 = std::move(file2);  // file1의 기존 파일이 자동 해제되어야 함
+            std::cout << "이동 대입 후 file1 상태: " << (file1.get() ? "유효" : "무효") << std::endl;
+            std::cout << "이동 대입 후 file2 상태: " << (file2.get() ? "유효" : "무효") << std::endl;
+        }
     }
     
     // TODO: 예외 안전성 테스트 추가 (파일 열기 실패 등)
