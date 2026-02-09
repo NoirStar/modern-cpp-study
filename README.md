@@ -4,6 +4,14 @@ C++ 현대적 프로그래밍 스터디 저장소입니다.
 
 ## 스터디 구조
 
+### 🤖 "넌 머야?" (Who am I?)
+이 시스템은 **Modern C++ Study**로, GitHub Copilot과 함께하는 적응형 C++ 학습 플랫폼입니다.
+- 학습자의 실력을 자동으로 평가하고 맞춤형 연습 문제 제공
+- 실시간 피드백과 코드 리뷰
+- 8가지 핵심 주제에 대한 체계적인 학습 경로
+
+`who_am_i.py` 스크립트를 실행하여 자신의 학습 진행 상황과 프로필을 확인할 수 있습니다.
+
 ### 📁 `.github/chatmodes/`
 - VS Code GitHub Copilot 대화형 학습 모드
 - `studycpp.chatmode.md` - C++ 학습 전용 모드
@@ -29,7 +37,23 @@ C++ 현대적 프로그래밍 스터디 저장소입니다.
 
 ## 시작하기
 
+### 내 프로필 확인하기 ("넌 머야?")
+
 ```bash
+# 학습자 프로필 및 진행 상황 확인
+python3 who_am_i.py
+
+# 사용자 ID 업데이트
+python3 who_am_i.py update
+```
+
+### 연습 문제 실행하기
+
+```bash
+# 자기소개 프로그램 (객체 지향 기초)
+g++ -std=c++20 -Wall -Wextra -Werror study/identity_exercise.cpp -o identity_test
+./identity_test
+
 # RAII 과제 (완료)
 g++ -std=c++20 -Wall -Wextra -Werror study/baseline_raii_exercise.cpp -o raii_test
 ./raii_test
