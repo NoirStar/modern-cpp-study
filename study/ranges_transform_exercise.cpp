@@ -22,7 +22,10 @@
 // TODO: 짝수만 필터링하여 제곱한 후 벡터로 반환
 std::vector<int> transform_even_squares(const std::vector<int>& numbers) {
     // 힌트: std::ranges::views::filter, transform, to 사용
-    
+    auto even_squares = numbers |
+        std::ranges::views::filter([] (int n) {return n % 2 == 0;}) |
+        std::ranges::views::transform([] (int n) {return n * n;});
+    return std::vector<int>(even_squares.begin(), even_squares.end());
 }
 
 // TODO: 문자열 벡터에서 길이가 n 이상인 것들을 대문자로 변환
@@ -86,8 +89,6 @@ int main() {
         std::cout << entry << std::endl;
     }
     // 기대: 김철수: 25세, 이영희: 30세, 박민수: 28세
-    
-    // TODO: 추가 엣지 케이스 테스트 (빈 벡터, 크기 불일치 등)
     
     std::cout << "모든 테스트 완료!" << std::endl;
     return 0;
